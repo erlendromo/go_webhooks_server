@@ -5,13 +5,20 @@ import (
 	"log"
 	"net/http"
 	"webhooks/internal/config"
+	"webhooks/internal/datasources/database"
 	"webhooks/internal/http/routes"
 )
 
 func StartServer() {
 	config := config.NewConfig()
-	router := routes.NewRouter(*config)
+
+	client, _ := database.NewFirestoreClient(*config)
+	// if err != nil {
+	// 	log.Fatal("Connection to firebase was unsuccessful")
+	// }
+
+	router := routes.NewRouter(*config, client)
 
 	log.Printf("Server started on port %s...\n", router.Port)
-	http.ListenAndServe(fmt.Sprintf(":%s", router.Port), router)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", router.Port), router))
 }
