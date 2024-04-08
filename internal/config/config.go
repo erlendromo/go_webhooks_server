@@ -3,16 +3,23 @@ package config
 import "os"
 
 type Config struct {
-	Port string
+	Port          string
+	DatabaseToken string
 }
 
 func NewConfig() *Config {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8081"
+	p := os.Getenv("PORT")
+	if p == "" {
+		p = "8081"
+	}
+
+	dbToken := os.Getenv("FIRESTORE_ACCESS_TOKEN")
+	if dbToken == "" {
+		dbToken = "firestore_access_token.json"
 	}
 
 	return &Config{
-		Port: port,
+		Port:          p,
+		DatabaseToken: dbToken,
 	}
 }
