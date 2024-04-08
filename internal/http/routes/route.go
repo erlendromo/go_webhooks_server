@@ -20,8 +20,10 @@ func NewRouter(config config.Config) *Router {
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	binder := BindRequest(w, r)
 	switch binder.Endpoint {
+	case constants.ROOT:
+		json.NewEncoder(w).Encode("Root")
 	case constants.WEBHOOKS_PATH:
-		json.NewDecoder(r.Body).Decode(&binder)
+		json.NewEncoder(w).Encode("Webhooks")
 	default:
 		http.Error(w, "invalid endpoint", http.StatusNotFound)
 	}
