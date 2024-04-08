@@ -3,27 +3,37 @@ package routes
 import (
 	"encoding/json"
 	"net/http"
+	"webhooks/internal/business/usecases"
 	"webhooks/internal/config"
 	"webhooks/internal/constants"
+	"webhooks/internal/http/handlers"
+
+	"cloud.google.com/go/firestore"
 )
 
 type Router struct {
-	Port string
+	Port   string
+	Client *firestore.Client
 }
 
-func NewRouter(config config.Config) *Router {
+func NewRouter(config config.Config, client *firestore.Client) *Router {
 	return &Router{
-		Port: config.Port,
+		Port:   config.Port,
+		Client: client,
 	}
 }
 
+// Should Handlerfunctions recieve the client as well or a middleware?
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	binder := BindRequest(w, r)
+	wUC := usecases.NewWebhookUsecase(router.Client, r.Context())
+
+	binder := BindRequest(r)
+
 	switch binder.Endpoint {
 	case constants.ROOT:
 		json.NewEncoder(w).Encode("Root")
 	case constants.WEBHOOKS_PATH:
-		json.NewEncoder(w).Encode("Webhooks")
+		handlers.HandleHTML(w, r, wUC)
 	default:
 		http.Error(w, "invalid endpoint", http.StatusNotFound)
 	}

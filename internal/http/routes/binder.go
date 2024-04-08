@@ -10,22 +10,18 @@ import (
 )
 
 type Binder struct {
-	ResponseWriter http.ResponseWriter
-	Request        *http.Request
-	Endpoint       string
-	ID             string
-	Params         map[string]interface{}
+	Endpoint string
+	Params   map[string]interface{}
+	ID       string
 }
 
 /*
 Helper function to bind the request to the binding.Request struct
 This is a dynamic function, meaning it will parse any and all query parameters and path parameters
 */
-func BindRequest(w http.ResponseWriter, r *http.Request) Binder {
+func BindRequest(r *http.Request) Binder {
 	binder := Binder{
-		ResponseWriter: w,
-		Request:        r,
-		Params:         make(map[string]any, 0),
+		Params: make(map[string]any, 0),
 	}
 
 	getPathFromRequest(&binder, strings.Split(r.URL.Path, constants.ROOT))
