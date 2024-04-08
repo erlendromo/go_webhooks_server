@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+    <title>Webhook Server</title>
+</head>
+<body style="background-color:#222222; padding:5px 30px 5px 30px;">
+    <h1 style="color:azure;">Webhooks</h1>
+
+    <div id="webhooks-container" style="display:flex; justify-content:start; flex-direction:column; flex-wrap:wrap; row-gap:20px; column-gap:30px;">
+
+        {{ range .Webhooks }}
+            <div id="webhook" style="width:400px; height:160px; background-color:#2f4f4f; padding:10px 30px 10px 30px; border-radius:10px;">
+                <h3 style="text-align:center; color:azure;">Event: {{ .Event }}</h3>
+                <p style="color:azure;">ID: {{ .ID }}</p>
+                <p style="color:azure;">Url: {{ .Url }}</p>
+                <p style="color:azure;">Country: {{ .Country }}</p>
+            </div>
+        {{ end }}
+    
+    </div>
+
+</body>
+</html>
