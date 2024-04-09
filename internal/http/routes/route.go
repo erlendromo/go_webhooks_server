@@ -3,7 +3,6 @@ package routes
 import (
 	"encoding/json"
 	"net/http"
-	"webhooks/internal/business/usecases"
 	"webhooks/internal/config"
 	"webhooks/internal/constants"
 	"webhooks/internal/http/handlers"
@@ -25,7 +24,7 @@ func NewRouter(config config.Config, client *firestore.Client) *Router {
 
 // Should Handlerfunctions recieve the client as well or a middleware?
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	wUC := usecases.NewWebhookUsecase(router.Client, r.Context())
+	//wUC := usecases.NewWebhookUsecase(router.Client, r.Context())
 
 	binder := BindRequest(r)
 
@@ -33,7 +32,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case constants.ROOT:
 		json.NewEncoder(w).Encode("Root")
 	case constants.WEBHOOKS_PATH:
-		handlers.HandleHTML(w, r, wUC)
+		handlers.HandleHTML(w, r, router.Client)
 	default:
 		http.Error(w, "invalid endpoint", http.StatusNotFound)
 	}
