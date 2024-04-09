@@ -12,10 +12,10 @@ import (
 func StartServer() {
 	config := config.NewConfig()
 
-	client, _ := database.NewFirestoreClient(*config)
-	// if err != nil {
-	// 	log.Fatal("Connection to firebase was unsuccessful")
-	// }
+	client, err := database.NewFirestoreClient(*config)
+	if err != nil {
+		log.Fatal("Connection to firebase was unsuccessful")
+	}
 
 	router := routes.NewRouter(*config, client)
 
