@@ -6,14 +6,15 @@ import (
 	"fmt"
 	"log"
 	"webhooks/internal/business/domains"
+	"webhooks/internal/constants"
 
 	"cloud.google.com/go/firestore"
 	"google.golang.org/api/iterator"
 )
 
-func GetDocuments[T any](client *firestore.Client, ctx context.Context, col string) ([]T, error) {
+func FetchDocuments[T any](client *firestore.Client, ctx context.Context, col string) ([]T, error) {
 	var results []T
-	iter := client.Collection(col).OrderBy("Timestamp", firestore.Desc).Documents(ctx)
+	iter := client.Collection(col).OrderBy(constants.TIMESTAMP, firestore.Desc).Documents(ctx)
 	defer iter.Stop()
 
 	for {
@@ -22,12 +23,12 @@ func GetDocuments[T any](client *firestore.Client, ctx context.Context, col stri
 			break
 		}
 		if err != nil {
-			return nil, fmt.Errorf("failed to fetch documents: %w", err)
+			return nil, fmt.Errorf("%s: %w", constants.FAILED_FETCH_DOCS, err)
 		}
 
 		var item T
 		if err := doc.DataTo(&item); err != nil {
-			log.Printf("Failed to decode document: %v", err)
+			log.Printf("%s: %v", constants.FAILED_DECODE_DOC, err)
 			continue
 		}
 
@@ -37,6 +38,7 @@ func GetDocuments[T any](client *firestore.Client, ctx context.Context, col stri
 	return results, nil
 }
 
+// TODO Modify structure to the same as above?
 func UploadDocument(client *firestore.Client, ctx context.Context, col string, wh domains.Webhook) error {
 	_, _, err := client.Collection(col).Add(ctx, wh)
 	return err
