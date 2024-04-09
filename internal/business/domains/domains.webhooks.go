@@ -1,10 +1,10 @@
 package domains
 
 type Webhook struct {
-	ID      string `form:"id"`
-	Url     string `form:"url"`
-	Country string `form:"country"`
-	Event   string `form:"event"`
+	Method    string `form:"method"`
+	Url       string `form:"url"`
+	Timestamp string `form:"timestamp"`
+	Content   any    `form:"content"`
 }
 
 type WebhookUsecase interface {
