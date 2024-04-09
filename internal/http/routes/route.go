@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"encoding/json"
 	"net/http"
+	"webhooks/internal/business/usecases"
 	"webhooks/internal/config"
 	"webhooks/internal/constants"
 	"webhooks/internal/http/handlers"
@@ -24,16 +24,14 @@ func NewRouter(config config.Config, client *firestore.Client) *Router {
 
 // Should Handlerfunctions recieve the client as well or a middleware?
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	//wUC := usecases.NewWebhookUsecase(router.Client, r.Context())
-
+	wUC := usecases.NewWebhookUsecase(router.Client, r.Context())
 	binder := BindRequest(r)
 
+	// TODO Add default page on root path??
 	switch binder.Endpoint {
-	case constants.ROOT:
-		json.NewEncoder(w).Encode("Root")
 	case constants.WEBHOOKS_PATH:
-		handlers.HandleHTML(w, r, router.Client)
+		handlers.WebhooksHandler(w, r, wUC)
 	default:
-		http.Error(w, "invalid endpoint", http.StatusNotFound)
+		http.Error(w, constants.INVALID_ENDPOINT, http.StatusNotFound)
 	}
 }
