@@ -1,5 +1,9 @@
 package constants
 
+const INDEX_HTML_PATH = "internal/html/index.html"
+
+// These are not currently in use...
+
 const HTML_SEGMENT = `<!DOCTYPE html>
 <html lang="en">
 <head>
