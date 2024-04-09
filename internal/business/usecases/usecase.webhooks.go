@@ -36,9 +36,9 @@ func (wUC *webhookUsecase) Store(w *domains.Webhook) (statuscode int, err error)
 }
 
 func (wUC *webhookUsecase) Get() (whs []domains.Webhook, s int, err error) {
-	whs, err = database.GetWebhooks(wUC.Client, wUC.Ctx, wUC.Collection)
+	whs, err = database.FetchDocuments[domains.Webhook](wUC.Client, wUC.Ctx, wUC.Collection)
 	if err != nil {
-		return whs, http.StatusInternalServerError, err
+		return nil, http.StatusInternalServerError, err
 	}
 
 	return whs, http.StatusOK, err
