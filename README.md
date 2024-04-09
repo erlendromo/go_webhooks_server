@@ -15,3 +15,11 @@ Actually not using HTMX after all..
 
 Content to be displayed will be changed with actual data sent to the registered urls.
 This server will only display data recieved from the registered urls.
+
+
+### TODO:
+
+- Move .env, Dockerfile and docker-compose.yaml to root (and delete deploy-directory)
+- Remove swagger.yaml (and delete docs-directory).
+- (Remove mocks??)
+- (Remove utils??)
