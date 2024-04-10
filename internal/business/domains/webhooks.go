@@ -4,7 +4,7 @@ type Webhook struct {
 	Method    string `form:"method"`
 	Url       string `form:"url"`
 	Timestamp string `form:"timestamp"`
-	Content   any    `form:"content"`
+	Content   any    `form:"content,omitempty"`
 }
 
 type WebhookUsecase interface {
