@@ -22,15 +22,15 @@ func NewRouter(config config.Config, client *firestore.Client) *Router {
 	}
 }
 
-// Should Handlerfunctions recieve the client as well or a middleware?
+// TODO Should Handlerfunctions recieve the usecase, or a middleware?
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	wUC := usecases.NewWebhookUsecase(router.Client, r.Context())
+	dbw := usecases.NewDBWebhook(router.Client, r.Context())
 	binder := BindRequest(r)
 
 	// TODO Add default page on root path??
 	switch binder.Endpoint {
 	case constants.WEBHOOKS_PATH:
-		handlers.WebhooksHandler(w, r, wUC)
+		handlers.WebhooksHandler(w, r, dbw)
 	default:
 		http.Error(w, constants.INVALID_ENDPOINT, http.StatusNotFound)
 	}

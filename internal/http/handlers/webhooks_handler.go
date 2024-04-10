@@ -21,7 +21,6 @@ func WebhooksHandler(w http.ResponseWriter, r *http.Request, wUC domains.Webhook
 	}
 }
 
-// TODO Make this retrieve max 20 documents.
 // TODO Prune documents that have been stored for more than (1 hour?)
 func displayHTML(w http.ResponseWriter, wUC domains.WebhookUsecase) {
 
