@@ -19,7 +19,5 @@ This server will only display data recieved from the registered urls.
 
 ### TODO:
 
-- Move .env, Dockerfile and docker-compose.yaml to root (and delete deploy-directory)
-- Remove swagger.yaml (and delete docs-directory).
-- (Remove mocks??)
-- (Remove utils??)
+- Create mocks
+- Add utils (if needed -> if not remove it)
