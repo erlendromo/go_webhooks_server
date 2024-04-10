@@ -14,7 +14,7 @@ import (
 
 func FetchDocuments[T any](client *firestore.Client, ctx context.Context, col string) ([]T, error) {
 	var results []T
-	iter := client.Collection(col).OrderBy(constants.TIMESTAMP, firestore.Desc).Documents(ctx)
+	iter := client.Collection(col).OrderBy(constants.TIMESTAMP, firestore.Desc).Limit(constants.FIRESTORE_REQUEST_LIMIT).Documents(ctx)
 	defer iter.Stop()
 
 	for {
