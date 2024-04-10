@@ -8,6 +8,7 @@ type Config struct {
 }
 
 func NewConfig() *Config {
+	// Consider using godotenv with .env file for this...
 	p := os.Getenv("PORT")
 	if p == "" {
 		p = "8081"
