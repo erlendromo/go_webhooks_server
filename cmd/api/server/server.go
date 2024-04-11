@@ -7,10 +7,20 @@ import (
 	"webhooks/internal/config"
 	"webhooks/internal/datasources/firestoredb"
 	"webhooks/internal/http/routes"
+
+	"github.com/joho/godotenv"
 )
 
 func StartServer() {
-	config := config.NewConfig()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	config, err := config.NewConfig()
+	if err != nil {
+		log.Fatalf("%s", err.Error())
+	}
 
 	client, err := firestoredb.NewFirestoreClient(*config)
 	if err != nil {
