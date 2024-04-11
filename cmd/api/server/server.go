@@ -5,14 +5,14 @@ import (
 	"log"
 	"net/http"
 	"webhooks/internal/config"
-	"webhooks/internal/datasources/database"
+	"webhooks/internal/datasources/firestoredb"
 	"webhooks/internal/http/routes"
 )
 
 func StartServer() {
 	config := config.NewConfig()
 
-	client, err := database.NewFirestoreClient(*config)
+	client, err := firestoredb.NewFirestoreClient(*config)
 	if err != nil {
 		log.Fatal("Connection to firebase was unsuccessful")
 	}
