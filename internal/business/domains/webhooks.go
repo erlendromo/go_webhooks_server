@@ -10,7 +10,4 @@ type Webhook struct {
 type WebhookUsecase interface {
 	Store(w *Webhook) (statuscode int, err error)
 	Get() (w []Webhook, statuscode int, err error)
-
-	// TODO Remove if not gonna be implemented
-	GetByID(id string) (w Webhook, statuscode int, err error)
 }
