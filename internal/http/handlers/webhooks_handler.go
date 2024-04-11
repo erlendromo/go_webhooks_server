@@ -7,11 +7,18 @@ import (
 	"net/http"
 	"time"
 	"webhooks/internal/business/domains"
+	"webhooks/internal/business/usecases"
 	"webhooks/internal/constants"
+
+	"cloud.google.com/go/firestore"
 )
 
-func WebhooksHandler(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUsecase) {
+func WebhooksHandler(w http.ResponseWriter, r *http.Request, client *firestore.Client) {
+	wUC := usecases.NewDBWebhook(client, r.Context())
+
 	switch r.Method {
+	case http.MethodHead:
+		w.WriteHeader(http.StatusOK)
 	case http.MethodGet:
 		displayHTML(w, wUC)
 	case http.MethodPost:
