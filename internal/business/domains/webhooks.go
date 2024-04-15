@@ -1,5 +1,7 @@
 package domains
 
+import "context"
+
 type Webhook struct {
 	Method    string `form:"method"`
 	Url       string `form:"url"`
@@ -8,6 +10,6 @@ type Webhook struct {
 }
 
 type WebhookUsecase interface {
-	Store(w *Webhook) (statuscode int, err error)
-	Get() (w []Webhook, statuscode int, err error)
+	Store(ctx context.Context, w *Webhook) (statuscode int, err error)
+	Get(ctx context.Context) (w []Webhook, statuscode int, err error)
 }
