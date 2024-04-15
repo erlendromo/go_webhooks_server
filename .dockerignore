@@ -1,11 +1,12 @@
-# Environment
+**/*.iml
+**/.idea
+**/*.json
+**/.git
+**/.secrets
+**/vendor
+*.log
+*.md
 .env
-
-# Secrets
-*.json
-
-# Mac
-.DS_Store
-
-# IDEA
-.idea
+.deploy
+.dockerignore
+.gitignore

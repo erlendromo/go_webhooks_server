@@ -1,0 +1,12 @@
+services:
+  webhooks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - FIRESTORE_ACCESS_TOKEN=${FIRESTORE_ACCESS_TOKEN}
+      
+    volumes:
+      - ./.secrets:/credentials:ro
+    ports:
+      - '8081:8081'

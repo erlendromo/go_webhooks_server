@@ -2,10 +2,20 @@
 .env
 
 # Secrets
-*.json
+.secrets/
 
 # Mac
 .DS_Store
 
 # IDEA
 .idea
+
+docs/
+
+tmp/
+
+.air.toml
+
+.dockerignore
+
+Makefile
