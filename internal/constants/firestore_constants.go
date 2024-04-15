@@ -11,6 +11,8 @@ const (
 
 // Errors
 const (
+	CONNECTION_ERR    = "Connection to firebase was unsuccessful"
 	FAILED_FETCH_DOCS = "failed to fetch documents"
 	FAILED_DECODE_DOC = "failed to decode document"
+	NO_DOCS_FOUND     = "no documents found"
 )

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"webhooks/internal/config"
+	"webhooks/internal/constants"
 	"webhooks/internal/datasources/database"
 	"webhooks/internal/http/routes"
 )
@@ -12,12 +13,12 @@ import (
 func StartServer() {
 	config, err := config.NewConfig()
 	if err != nil {
-		log.Fatalf("%s", err.Error())
+		log.Fatal(err.Error())
 	}
 
 	client, err := database.NewFirestoreClient(*config)
 	if err != nil {
-		// log.Fatal("Connection to firebase was unsuccessful")
+		log.Fatal(constants.CONNECTION_ERR)
 	}
 
 	router := routes.NewRouter(*config, client)

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"webhooks/internal/business/domains"
 	"webhooks/internal/business/usecases"
 	"webhooks/internal/constants"
+	"webhooks/internal/utils"
 
 	"cloud.google.com/go/firestore"
 )
@@ -35,7 +37,7 @@ func WebhooksHandler(w http.ResponseWriter, r *http.Request, client *firestore.C
 	case http.MethodPost:
 		addWebhook(w, r, wUC)
 	default:
-		http.Error(w, constants.METHOD_NOT_ALLOWED, http.StatusMethodNotAllowed)
+		utils.ERROR(w, errors.New(constants.METHOD_NOT_ALLOWED), http.StatusMethodNotAllowed)
 	}
 }
 
@@ -45,13 +47,13 @@ func displayHTML(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUsec
 	// Move this to business domains-usecases???
 	tmp, err := template.ParseFiles(constants.INDEX_HTML_PATH)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.ERROR(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	whs, s, err := wUC.Get(r.Context())
+	whs, sc, err := wUC.Get(r.Context())
 	if err != nil {
-		http.Error(w, err.Error(), s)
+		utils.ERROR(w, err, sc)
 		return
 	}
 
@@ -61,7 +63,7 @@ func displayHTML(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUsec
 
 	err = tmp.Execute(w, webhooks)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.ERROR(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -71,7 +73,7 @@ func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUseca
 	var v any
 	err := json.NewDecoder(r.Body).Decode(&v)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.ERROR(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -83,8 +85,9 @@ func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUseca
 		Content:   v,
 	}
 
-	s, err := wUC.Store(r.Context(), &wh)
+	sc, err := wUC.Store(r.Context(), &wh)
 	if err != nil {
-		http.Error(w, err.Error(), s)
+		utils.ERROR(w, err, sc)
+		return
 	}
 }

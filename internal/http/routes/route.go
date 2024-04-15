@@ -22,7 +22,6 @@ func NewRouter(config config.Config, client *firestore.Client) *Router {
 	}
 }
 
-// TODO Should Handlerfunctions recieve the usecase, or a middleware?
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	binder := BindRequest(r)
 

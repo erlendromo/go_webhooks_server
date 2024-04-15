@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"webhooks/internal/constants"
 
 	"cloud.google.com/go/firestore"
 	"google.golang.org/api/iterator"
@@ -21,14 +22,14 @@ func FetchDocuments(ctx context.Context, q firestore.Query) ([]*firestore.Docume
 		}
 
 		if err != nil {
-			return nil, fmt.Errorf("failed to fetch documents: %w", err)
+			return nil, fmt.Errorf("%s: %w", constants.FAILED_FETCH_DOCS, err)
 		}
 
 		snapshots = append(snapshots, snapshot)
 	}
 
 	if len(snapshots) == 0 {
-		return nil, fmt.Errorf("no documents found")
+		return nil, fmt.Errorf(constants.NO_DOCS_FOUND)
 	}
 
 	return snapshots, nil
