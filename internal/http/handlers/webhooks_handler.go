@@ -13,14 +13,25 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
+// @Summary      List accounts
+// @Description  get accounts
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Param        q    query     string  false  "name search by q"  Format(email)
+// @Success      200  {array}   string
+// @Failure      400  {object}  string
+// @Failure      404  {object}  string
+// @Failure      500  {object}  string
+// @Router       /accounts [get]
 func WebhooksHandler(w http.ResponseWriter, r *http.Request, client *firestore.Client) {
-	wUC := usecases.NewDBWebhook(client, r.Context())
+	wUC := usecases.NewDBWebhook(client)
 
 	switch r.Method {
 	case http.MethodHead:
 		w.WriteHeader(http.StatusOK)
 	case http.MethodGet:
-		displayHTML(w, wUC)
+		displayHTML(w, r, wUC)
 	case http.MethodPost:
 		addWebhook(w, r, wUC)
 	default:
@@ -29,7 +40,7 @@ func WebhooksHandler(w http.ResponseWriter, r *http.Request, client *firestore.C
 }
 
 // TODO Prune documents that have been stored for more than (1 hour?)
-func displayHTML(w http.ResponseWriter, wUC domains.WebhookUsecase) {
+func displayHTML(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUsecase) {
 
 	// Move this to business domains-usecases???
 	tmp, err := template.ParseFiles(constants.INDEX_HTML_PATH)
@@ -38,7 +49,7 @@ func displayHTML(w http.ResponseWriter, wUC domains.WebhookUsecase) {
 		return
 	}
 
-	whs, s, err := wUC.Get()
+	whs, s, err := wUC.Get(r.Context())
 	if err != nil {
 		http.Error(w, err.Error(), s)
 		return
@@ -72,7 +83,7 @@ func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUseca
 		Content:   v,
 	}
 
-	s, err := wUC.Store(&wh)
+	s, err := wUC.Store(r.Context(), &wh)
 	if err != nil {
 		http.Error(w, err.Error(), s)
 	}

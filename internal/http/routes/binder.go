@@ -38,7 +38,7 @@ func getPathFromRequest(binder *Binder, path []string) {
 	url := constants.ROOT
 	for _, p := range path {
 		p = strings.TrimSpace(p)
-		if p == constants.WEBHOOKS {
+		if p == constants.WEBHOOKS || p == constants.SWAGGER {
 			url = fmt.Sprintf("%s%s%s", url, p, constants.ROOT)
 		} else if len(p) > 0 {
 			binder.ID = p
