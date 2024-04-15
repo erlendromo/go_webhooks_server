@@ -1,4 +1,4 @@
-package firestoredb
+package database
 
 import (
 	"context"
