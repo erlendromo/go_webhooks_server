@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"html/template"
 	"net/http"
 	"time"
@@ -15,17 +14,6 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-// @Summary      List accounts
-// @Description  get accounts
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Param        q    query     string  false  "name search by q"  Format(email)
-// @Success      200  {array}   string
-// @Failure      400  {object}  string
-// @Failure      404  {object}  string
-// @Failure      500  {object}  string
-// @Router       /accounts [get]
 func WebhooksHandler(w http.ResponseWriter, r *http.Request, client *firestore.Client) {
 	wUC := usecases.NewDBWebhook(client)
 
@@ -43,8 +31,6 @@ func WebhooksHandler(w http.ResponseWriter, r *http.Request, client *firestore.C
 
 // TODO Prune documents that have been stored for more than (1 hour?)
 func displayHTML(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUsecase) {
-
-	// Move this to business domains-usecases???
 	tmp, err := template.ParseFiles(constants.INDEX_HTML_PATH)
 	if err != nil {
 		utils.ERROR(w, err, http.StatusInternalServerError)
@@ -69,20 +55,21 @@ func displayHTML(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUsec
 }
 
 func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUsecase) {
-	// Extract this into own method??
-	var v any
-	err := json.NewDecoder(r.Body).Decode(&v)
+	var n struct {
+		ID      string `json:"id"`
+		Country string `json:"country"`
+		Event   string `json:"event"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&n)
 	if err != nil {
 		utils.ERROR(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	// TODO This implementation will be reworked when setup on other service is ready
 	wh := domains.Webhook{
-		Method:    r.Method,
-		Url:       fmt.Sprintf("%s%s", constants.OTHER_SERVICE, r.URL.Path),
+		Event:     n.Event,
+		Url:       r.URL.EscapedPath(),
 		Timestamp: time.Now().Local().Format(constants.TIME_FORMAT),
-		Content:   v,
 	}
 
 	sc, err := wUC.Store(r.Context(), &wh)
@@ -90,4 +77,6 @@ func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUseca
 		utils.ERROR(w, err, sc)
 		return
 	}
+
+	utils.JSON(w, sc, "Webhook-trigger recieved!")
 }

@@ -3,10 +3,9 @@ package domains
 import "context"
 
 type Webhook struct {
-	Method    string `form:"method"`
+	Event     string `form:"event"`
 	Url       string `form:"url"`
 	Timestamp string `form:"timestamp"`
-	Content   any    `form:"content,omitempty"`
 }
 
 type WebhookUsecase interface {
