@@ -5,7 +5,7 @@ const WEBHOOK_TRIGGERS_COLLECTION = "webhook_triggers"
 
 // Utils
 const (
-	TIMESTAMP               = "timestamp"
+	TIMESTAMP               = "Timestamp"
 	FIRESTORE_REQUEST_LIMIT = 20
 )
 

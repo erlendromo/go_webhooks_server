@@ -3,9 +3,9 @@ package domains
 import "context"
 
 type Webhook struct {
-	Event     string `form:"event"`
-	Url       string `form:"url"`
-	Timestamp string `form:"timestamp"`
+	Event     string `form:"event" firestore:"Event"`
+	Url       string `form:"url" firestore:"Url"`
+	Timestamp string `form:"timestamp" firestore:"Timestamp"`
 }
 
 type WebhookUsecase interface {

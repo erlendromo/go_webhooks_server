@@ -68,7 +68,7 @@ func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUseca
 
 	wh := domains.Webhook{
 		Event:     n.Event,
-		Url:       r.URL.EscapedPath(),
+		Url:       r.RemoteAddr,
 		Timestamp: n.Time,
 	}
 
