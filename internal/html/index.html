@@ -11,10 +11,9 @@
     <div id="webhooks-container" style="display:flex; justify-content:start; flex-wrap:wrap; row-gap:20px; column-gap:30px;">
         {{ range .Webhooks }}
             <div style="width:27%; height:auto; background-color:#2f4f4f; padding:10px 30px 10px 30px; border-radius:10px;">
-                <h2 style="text-align:center; background-color:#6b0690; color:azure; padding:5px; border-radius:10px;">{{ .Method }}</h2>
+                <h2 style="text-align:center; background-color:#6b0690; color:azure; padding:5px; border-radius:10px;">{{ .Event }}</h2>
                 <p style="color:azure;">{{ .Url }}</p>
                 <p style="color:azure;">{{ .Timestamp }}</p>
-                <p style="color:azure;">{{ .Content }}</p>
             </div>
         {{ end }}
     </div>

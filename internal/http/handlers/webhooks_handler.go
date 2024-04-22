@@ -5,7 +5,6 @@ import (
 	"errors"
 	"html/template"
 	"net/http"
-	"time"
 	"webhooks/internal/business/domains"
 	"webhooks/internal/business/usecases"
 	"webhooks/internal/constants"
@@ -59,6 +58,7 @@ func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUseca
 		ID      string `json:"id"`
 		Country string `json:"country"`
 		Event   string `json:"event"`
+		Time    string `json:"time"`
 	}
 	err := json.NewDecoder(r.Body).Decode(&n)
 	if err != nil {
@@ -69,7 +69,7 @@ func addWebhook(w http.ResponseWriter, r *http.Request, wUC domains.WebhookUseca
 	wh := domains.Webhook{
 		Event:     n.Event,
 		Url:       r.URL.EscapedPath(),
-		Timestamp: time.Now().Local().Format(constants.TIME_FORMAT),
+		Timestamp: n.Time,
 	}
 
 	sc, err := wUC.Store(r.Context(), &wh)
