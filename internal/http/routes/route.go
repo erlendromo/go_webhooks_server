@@ -24,9 +24,9 @@ func NewRouter(config config.Config, client *firestore.Client) *Router {
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	binder := BindRequest(r)
-
-	// TODO Add default page on root path??
 	switch binder.Endpoint {
+	case constants.ROOT:
+		handlers.HandleDefault(w, r)
 	case constants.WEBHOOKS_PATH:
 		handlers.WebhooksHandler(w, r, router.Client)
 	case constants.SWAGGER_PATH:

@@ -1,6 +1,9 @@
 package constants
 
-const INDEX_HTML_PATH = "./internal/html/index.html"
+const (
+	INDEX_HTML_PATH = "./internal/html/index.html"
+	ROOT_HTML_PATH  = "./internal/html/root.html"
+)
 
 // These are not currently in use...
 
