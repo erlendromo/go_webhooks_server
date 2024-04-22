@@ -1,23 +1,27 @@
 # Webhooks server
 
-### HTMX
+### Endpoints
 
-This server utilizes HTMX to dynamically add new elements to the html-body.
-This data will be recieved from the other server when the webhook-registrations are called.
-Watch this: https://www.youtube.com/watch?v=F9H6vYelYyU
+/ (root)
+    - Supports only http.MethodGET
+    - This endpoint will guide the user to the webhooks-endpoint, which is the heart of the application.
 
-Actually not using HTMX after all..
+/webhooks
+    - Supports http.MethodHEAD, http.MethodGET
+    - Also supports http.MethodPOST, but this is only used by other services that send webhooks-triggers.
+    - This endpoint will display the last 20 webhooks-triggers sent by other services.
 
-<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+### Dependencies
 
+This service is dependent on database for persistent storage/retreival of webhooks-triggers. The current database-infrastructure in use is google's firestore.
 
-### N.B.
+### Deployment
 
-Content to be displayed will be changed with actual data sent to the registered urls.
-This server will only display data recieved from the registered urls.
+This service is deployable only using docker (docker compose). The reason for this is that dealing with firestore, an access token is needed to reach the database. This token is a secret file not to be displayed to the rest of the world. Therefore this token is passed as a volume into the docker container to hide its precence, and the application will not run without the proper setup of Dockerfile, docker-compose.yaml, .secrets folder, and .env file.
 
+To deploy the service with docker, follow these steps:
 
-### TODO:
-
-- Create mocks
-- Add utils (if needed -> if not remove it)
+1) Navigate to the root-folder of this project in a terminal.
+2) ``` docker compose up -d --build ```
+3) Optional (to see logs of the server): ``` docker logs -f <container-name>```
+4) If you want to close the container: ``` docker compose down ```
