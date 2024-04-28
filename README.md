@@ -1,5 +1,8 @@
 # Webhooks server
 
+### Good-To-Know
+All time-related displays are encoded as UTC. The equivalent to current time in Norway would be the time +2 hours.
+
 ### Endpoints
 
 / (root)
